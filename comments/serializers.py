@@ -4,7 +4,7 @@ from users.serializers import UserSerializer
 from commentlikes.models import CommentLike
 from comments.models import Comment
 
-class commentsSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     post = PostSerializer() # fk-post 
     user = UserSerializer() # fk-user 
 
@@ -12,7 +12,7 @@ class commentsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Comment
-        fields = ['post','user','content']
+        fields = ['id','post','user','content']
 
     def get_commentlike_num(self,obj): # 댓글 좋아요 개수 반환
         return CommentLike.objects.filter(CommentLike=obj).count()

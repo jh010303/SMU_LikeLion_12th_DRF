@@ -9,7 +9,7 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['title','content','user','created_at','updated_at']
+        fields = ['id','title','content','user','created_at','updated_at','postlikes_num']
         extra_kwargs = {'created_at':{'read_only':True}} # 만들어진 시간은 고칠 수 없게
 
     def get_postlikes_num(self,obj): # 게시글의 좋아요 개수 반환
