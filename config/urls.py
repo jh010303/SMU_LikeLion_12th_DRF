@@ -20,7 +20,10 @@ from django.conf.urls.static import static
 from django.conf import settings 
 
 urlpatterns = [
-    path('users/', include('users.urls')),
+    path('posts/', include('posts.urls')), 
+    path('users/', include('users.urls')), 
 ]
+#urlpatters에 첫번째 매개변수 route:str은 주소뒤에 오는 것
+# ex) 127.0.0.1:8000/posts/  ?   에서 ?은 posts.urls.py에서 처리하게 됨
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
