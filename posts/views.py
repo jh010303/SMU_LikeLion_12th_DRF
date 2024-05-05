@@ -1,5 +1,8 @@
 from posts.models import Post
+from users.models import User
 from posts.serializers import PostSerializer
+from users.serializers import UserSerializer
+
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,6 +18,7 @@ def post_list_api_view(request): # post 목록 조회
         return Response(serializer.data)
 
     elif request.method == 'POST': # 요청된 자원을 생성(create)함
+        request.user = User.objects.get(id=1) # db에 존재하는 user
         serializer = PostSerializer(data=request.data,user=request.user) # 요청 데이터에 기반하여 PostSerializer 생성
         if serializer.is_valid():
             serializer.save()
@@ -34,6 +38,7 @@ def post_retrieve_api_view(request,pk): # post 특정 목록 조회 (pk통해서
         return Response(serializer.data)
     
     elif request.method == 'PUT': # 요청된 자원을 수정(update)함
+        request.user = User.objects.get(id=1) # db에 존재하는 user
         serializer = PostSerializer(post,data=request.data,user=request.user)
         if serializer.is_valid():
             serializer.save()
