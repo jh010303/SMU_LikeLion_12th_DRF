@@ -16,5 +16,3 @@ class PostSerializer(serializers.ModelSerializer):
         return PostLike.objects.filter(post=obj).count()
         # 게시글의 좋아요 개수
         # 특정 게시글의 serializer
-    
-    
