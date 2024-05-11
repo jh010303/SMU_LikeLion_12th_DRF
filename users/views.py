@@ -5,33 +5,30 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
+import django.contrib.auth.models as tk
 
 # Create your views here.
 # 게시글 수정, 게시글 삭제
-    
-@api_view(['POST'])
+
+@api_view(['POST']) # 안됨..
 def user_join_api_view(request): # user가 회원가입 하는 함수
     if request.method == 'POST': # 요청한 데이터를 생성해야 함
         # 회원가입에 필요한 데이터 가져옴 
-        id = request.data.get('id')
         username = request.data.get('username')
-        email = request.data.get('email')
         password = request.data.get('password')
-        introducing = request.data.get('introdcuing')
-        gender = request.data.get('gender')
+        email = request.data.get('email')
         # 위의 데이터를 바탕으로 새로운 user model 생성
-        new_user = User.objects.create_user(
-            id=id,
-            username=username,
-            email = email,
-            password = password,
-            introducing = introducing,
-            gender = gender
+        new_user = User.objects.create(
+            username,
+            password,
+            email,
         )
         new_user.save() # 모델 저장
         serializer = UserSerializer(new_user) # 새로운 user 시리얼화
-        serializer.save() # 저장
-        return Response(serializer.data,status=status.HTTP_201_CREATED) # 새로운 user 반환
+        if serializer.is_valid():
+            serializer.save() # 저장
+            return Response(serializer.data,status=status.HTTP_201_CREATED) # 새로운 user 반환
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
 def user_delete_api_view(request,pk): #user 삭제 ( 탈퇴 개념 )
@@ -48,9 +45,7 @@ def user_login_api_view(request):
     # 사용자가 입력한 것
     username = request.data.get('username')
     password = request.data.get('password')
-
     user = User.objects.get(username = username) # 사용자가 입력한게 존재하는지
-    
     # 사용자가 입력한 username에 따른 password가 있는지
     if not check_password(password,user.password): #암호화된 password와 복호화된 user.password 비교
         return Response(status=status.HTTP_401_UNAUTHORIZED)

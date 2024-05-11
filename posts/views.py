@@ -17,12 +17,11 @@ def post_list_api_view(request): # post 목록 조회
         serializer = PostSerializer(posts,many=True)
         return Response(serializer.data)
 
-    elif request.method == 'POST': # 요청된 자원을 생성(create)함
-        request.user = User.objects.get(id=1) # db에 존재하는 user
+    elif request.method == 'POST': # 요청된 자원을 생성(create)함 안 됨..
         serializer = PostSerializer(data=request.data) # 요청 데이터에 기반하여 PostSerializer 생성, PostSerailizer의 매개변수에는 딕셔너리
         # request.data: user가 작성한 게시글의 데이터, 처음 선언할 때 매개변수 1개만 넣어야 함
         if serializer.is_valid():
-            serializer.save(user=request.user)
+            serializer.save(user = request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -39,7 +38,6 @@ def post_retrieve_api_view(request,post_id): # post 특정 목록 조회 (pk통�
         return Response(serializer.data)
     
     elif request.method == 'PUT': # 요청된 자원을 수정(update)함, 전체 수정
-        request.user = User.objects.get(id=1) # db에 존재하는 user
         serializer = PostSerializer(post,data=request.data) # user의 모든 정보를 받음
         if serializer.is_valid():
             serializer.save()
