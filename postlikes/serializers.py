@@ -4,8 +4,8 @@ from users.serializers import UserSerializer
 from postlikes.models import PostLike
 
 class PostLikeSerializer(serializers.ModelSerializer):
-    post = PostSerializer() # pk-post 시리얼라이저
-    user = UserSerializer() # pk-user 시니얼라이저
+    post = PostSerializer(required = False) # pk-post 시리얼라이저
+    user = UserSerializer(required = False) # pk-user 시니얼라이저
 
     class Meta:
         model = PostLike

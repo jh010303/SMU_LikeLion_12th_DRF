@@ -4,7 +4,6 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import check_password
-import django.contrib.auth.models as model
 from rest_framework_simplejwt.tokens import RefreshToken
 
 # Create your views here.

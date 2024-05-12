@@ -4,8 +4,8 @@ from users.serializers import UserSerializer
 from commentlikes.models import CommentLike
 
 class CommentLikeSerializer(serializers.ModelSerializer):
-    comment = CommentSerializer() # fk-comment 
-    user = UserSerializer() # fk-user 
+    comment = CommentSerializer(required = False) # fk-comment 
+    user = UserSerializer(required = False) # fk-user 
 
     class Meta:
         model = CommentLike

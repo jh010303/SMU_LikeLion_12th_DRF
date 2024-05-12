@@ -1,8 +1,6 @@
 from posts.models import Post
 from users.models import User
 from posts.serializers import PostSerializer
-from users.serializers import UserSerializer
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -14,7 +12,7 @@ from rest_framework import status
 def post_list_api_view(request): # post 목록 조회
     try:
         user = User.objects.get(pk=1) # 이미 있는 user 데이터 임시로 가져오기
-    except Post.DoesNotExist:
+    except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
     if request.method == 'GET': # 요청된 정보를 검색하여 응답해줌 ( read )
