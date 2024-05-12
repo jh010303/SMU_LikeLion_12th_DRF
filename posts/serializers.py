@@ -4,7 +4,7 @@ from postlikes.models import PostLike
 from posts.models import Post
 
 class PostSerializer(serializers.ModelSerializer):
-    user = UserSerializer() # fk user
+    user = UserSerializer(required = False) # fk user 실제 앱에서는 post가 생성되면 당연히 user가 필요함 -> 일단 임시로..
     postlikes_num = serializers.SerializerMethodField() # 게시글의 좋아요 개수
 
     class Meta:

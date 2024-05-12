@@ -4,27 +4,16 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import check_password
+import django.contrib.auth.models as model
 from rest_framework_simplejwt.tokens import RefreshToken
-import django.contrib.auth.models as tk
 
 # Create your views here.
 # 게시글 수정, 게시글 삭제
 
-@api_view(['POST']) # 안됨..
+@api_view(['POST'])
 def user_join_api_view(request): # user가 회원가입 하는 함수
     if request.method == 'POST': # 요청한 데이터를 생성해야 함
-        # 회원가입에 필요한 데이터 가져옴 
-        username = request.data.get('username')
-        password = request.data.get('password')
-        email = request.data.get('email')
-        # 위의 데이터를 바탕으로 새로운 user model 생성
-        new_user = User.objects.create(
-            username,
-            password,
-            email,
-        )
-        new_user.save() # 모델 저장
-        serializer = UserSerializer(new_user) # 새로운 user 시리얼화
+        serializer = UserSerializer(data=request.data) # 사용자가 입력한 데이터 토대로 serializer
         if serializer.is_valid():
             serializer.save() # 저장
             return Response(serializer.data,status=status.HTTP_201_CREATED) # 새로운 user 반환

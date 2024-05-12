@@ -5,8 +5,8 @@ from commentlikes.models import CommentLike
 from comments.models import Comment
 
 class CommentSerializer(serializers.ModelSerializer):
-    post = PostSerializer() # fk-post 
-    user = UserSerializer() # fk-user 
+    post = PostSerializer(required = False) # fk-post 
+    user = UserSerializer(required = False) # fk-user 
 
     commentlike_num = serializers.SerializerMethodField() # 댓글 좋아요 개수
     # meta 클래스의 field에 넣어줘야함 ( 까먹지 말기 )

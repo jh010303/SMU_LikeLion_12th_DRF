@@ -22,6 +22,7 @@ from django.conf import settings
 urlpatterns = [
     path('posts/', include('posts.urls')), 
     path('users/', include('users.urls')), 
+    path('comments/', include('comments.urls')), 
 ]
 #urlpatters에 첫번째 매개변수 route:str은 주소뒤에 오는 것
 # ex) 127.0.0.1:8000/posts/  ?   에서 ?은 posts.urls.py에서 처리하게 됨
