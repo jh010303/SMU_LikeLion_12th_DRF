@@ -10,35 +10,27 @@ from posts.models import Post
 # 누가 좋아요 눌렀는지 보기
 # Create your views here
 
-@api_view(['GET']) 
+@api_view(['GET','POST']) 
 def postlikes_list_api_view(request,post_id): # 특정 게시글의 좋아요 보기
     try: # 특정 게시글 찾기
-        post = Post.objects.get(pk = post_id)
-    except Post.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    if request.method == 'GET':
-        postlikes = PostLike.objects.filter(post = post) # 특정 게시글에 있는 좋아요 보기 
-        serializer = PostLikeSerializer(postlikes,many=True)
-        return Response(serializer.data,status=status.HTTP_200_OK)
-
-@api_view(['POST'])
-def create_postlikes_api_view(request,post_id): # 특정 게시글에 좋아요 달기
-    try: # 특정 게시글 찾기
-        post = Post.objects.get(pk = post_id)
+        post = Post.objects.get(id = post_id)
     except Post.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     
-    if request.method == 'POST':
-        serializer = PostLikeSerializer(data = request.data) # 게시글 좋아요 만들기
-        if serializer.is_valid():
-            serializer.save(post=post) # 게시글 좋아요의 post를 특정 post로 정하기
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- 
+    if request.method == 'GET': # 특정 게시글에 있는 좋아요 보기
+        postlikes = PostLike.objects.filter(post = post) # 특정 게시글에 있는 좋아요 보기 
+        serializer = PostLikeSerializer(postlikes,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+    elif request.method == 'POST': # 특정 게시글에 좋아요 달기
+        postlike = PostLike.objects.create(user = request.user, post = post) # request.data에 아무것도 없을 때는 create 사용,object manager로 사용
+        serializer = PostLikeSerializer(postlike)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
 @api_view(['DELETE']) 
 def delete_postlikes_api_view(request,postlikes_id): # 특정 게시글의 좋아요 보기
     try: # 특정 게시글 찾기
-        postlikes = PostLike.objects.get(pk = postlikes_id)
+        postlikes = PostLike.objects.get(id = postlikes_id)
     except PostLike.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'DELETE':

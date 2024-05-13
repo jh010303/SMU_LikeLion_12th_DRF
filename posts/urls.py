@@ -5,9 +5,9 @@ from django.conf import settings
 
 from posts import views
 
-urlpatterns = [
-    path('',views.post_list_api_view, name='post-list'), # post 목록 조회,
-    path('<int:post_id>/',views.post_retrieve_api_view,name = 'post-retrieve') # post 단일 목록 조회
+urlpatterns = [ 
+    path('',views.post_list_api_view, name='post-list'), # post 목록 조회, 생성
+    path('<int:post_id>/',views.post_retrieve_api_view,name = 'post-retrieve') # post 단일 목록 조회,삭제,수정
     # 나중에 view에 post_id 변수넣기
 ]
 

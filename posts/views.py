@@ -9,12 +9,7 @@ from rest_framework import status
 # 게시글 수정, 게시글 삭제
 
 @api_view(['GET','POST'])
-def post_list_api_view(request): # post 목록 조회
-    try:
-        user = User.objects.get(pk=1) # 이미 있는 user 데이터 임시로 가져오기
-    except User.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-    
+def post_list_api_view(request): # post 목록 조회, 생성
     if request.method == 'GET': # 요청된 정보를 검색하여 응답해줌 ( read )
         posts = Post.objects.all() # 포스트 전체
         serializer = PostSerializer(posts,many=True)
@@ -25,7 +20,7 @@ def post_list_api_view(request): # post 목록 조회
         serializer = PostSerializer(data=request.data) # 요청 데이터에 기반하여 PostSerializer 생성, PostSerailizer의 매개변수에는 딕셔너리
         # request.data: user가 작성한 게시글의 데이터, 처음 선언할 때 매개변수 1개만 넣어야 함
         if serializer.is_valid():
-            serializer.save(user = user)
+            serializer.save(user = request.user) # user = request.user
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -33,7 +28,7 @@ def post_list_api_view(request): # post 목록 조회
 def post_retrieve_api_view(request,post_id): # post 특정 목록 조회 (pk통해서 구분), pk에는 <int:post_id>가 옴
     # pk를 가진 post가 존재하는지 확인
     try:
-        post = Post.objects.get(pk=post_id)
+        post = Post.objects.get(id=post_id)
     except Post.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -44,7 +39,7 @@ def post_retrieve_api_view(request,post_id): # post 특정 목록 조회 (pk통�
     elif request.method == 'PUT': # 요청된 자원을 수정(update)함, 전체 수정
         serializer = PostSerializer(post,data=request.data) # user의 모든 정보를 받음
         if serializer.is_valid():
-            serializer.save()
+            serializer.save() # user = request.user
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 

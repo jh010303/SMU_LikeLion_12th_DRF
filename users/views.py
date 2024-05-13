@@ -9,20 +9,24 @@ from rest_framework_simplejwt.tokens import RefreshToken
 # Create your views here.
 # 게시글 수정, 게시글 삭제
 
-@api_view(['POST'])
+@api_view(['POST']) # 좀 수정하기 -> 비밀번호가 그대로 보임, 질문하기 !! -> orm을 써야하는가?
 def user_join_api_view(request): # user가 회원가입 하는 함수
     if request.method == 'POST': # 요청한 데이터를 생성해야 함
-        serializer = UserSerializer(data=request.data) # 사용자가 입력한 데이터 토대로 serializer
+        serializer = UserSerializer(data = request.data)
+        #username = request.data.get('username')
+        #password = request.data.get('password')
+        #new_user = User.objects.create(username = username, password = password)
+        #serializer = UserSerializer(data = new_user) # 사용자가 입력한 데이터 토대로 serializer
         if serializer.is_valid():
             serializer.save() # 저장
             return Response(serializer.data,status=status.HTTP_201_CREATED) # 새로운 user 반환
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def user_delete_api_view(request,pk): #user 삭제 ( 탈퇴 개념 )
+def user_delete_api_view(request,user_id): #user 삭제 ( 탈퇴 개념 )
     try:
-        delete_user = User.objects.get(pk=pk)
-    except delete_user.DoesNotExist:
+        delete_user = User.objects.get(id=user_id) # id = 매개변수명
+    except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'DELETE': 
         delete_user.delete()
