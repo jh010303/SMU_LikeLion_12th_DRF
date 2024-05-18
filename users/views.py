@@ -5,8 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
-
-from rest_framework.generics import CreateAPIView
+from rest_framework import viewsets
 
 # Create your views here.
 # 게시글 수정, 게시글 삭제
@@ -57,6 +56,22 @@ def test_login(request):
         serializer = UserSerializer(request.user) # request.user 객체 ( 딕셔너리 형태 아님 )
         return Response(serializer.data,status=status.HTTP_200_OK)
     return Response(status=status.HTTP_401_UNAUTHORIZED) # 토큰 없이 보내면
-
-
 #========================================view set 방법=========================================================
+class UserListAPIView(viewsets.ModelViewSet): # 회원가입, 로그인 함수
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
+
+    def create(self,request): # 회원가입
+        serializer = UserSerializer(data = request.data)
+        if serializer.is_valid():
+            serializer.save() # 저장
+            return Response(serializer.data,status=status.HTTP_201_CREATED) # 새로운 user 반환
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class UserRetrieveAPIView(viewsets.ModelViewSet): # 삭제 함수
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'user_id'
