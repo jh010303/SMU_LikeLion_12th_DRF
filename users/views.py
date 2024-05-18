@@ -6,17 +6,15 @@ from rest_framework import status
 from django.contrib.auth.hashers import check_password
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from rest_framework.generics import CreateAPIView
+
 # Create your views here.
 # 게시글 수정, 게시글 삭제
 
-@api_view(['POST']) # 좀 수정하기 -> 비밀번호가 그대로 보임, 질문하기 !! -> orm을 써야하는가?
+@api_view(['POST']) 
 def user_join_api_view(request): # user가 회원가입 하는 함수
     if request.method == 'POST': # 요청한 데이터를 생성해야 함
         serializer = UserSerializer(data = request.data)
-        #username = request.data.get('username')
-        #password = request.data.get('password')
-        #new_user = User.objects.create(username = username, password = password)
-        #serializer = UserSerializer(data = new_user) # 사용자가 입력한 데이터 토대로 serializer
         if serializer.is_valid():
             serializer.save() # 저장
             return Response(serializer.data,status=status.HTTP_201_CREATED) # 새로운 user 반환
@@ -61,19 +59,4 @@ def test_login(request):
     return Response(status=status.HTTP_401_UNAUTHORIZED) # 토큰 없이 보내면
 
 
-    
-
-
-        
-        
-
-
-        
-
-
-
-
-    
-        
-
-    
+#========================================view set 방법=========================================================

@@ -46,6 +46,3 @@ def comments_delete_api_view(request,comment_id): # 특정 게시글의 특정 �
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
-    
-
-
