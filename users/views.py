@@ -83,3 +83,10 @@ class UserViewSet(viewsets.ModelViewSet): # 전부 구현
             }
         )
     
+    @action(methods=['GET'],detail = False, url_path='test',url_name='test-login')
+    def test(self,request): # 로그인 테스트
+        if request.user.is_authenticated:
+            serializer = UserSerializer(request.user) # request.user 객체 ( 딕셔너리 형태 아님 )
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_401_UNAUTHORIZED) # 토큰 없이 보내면
+    
