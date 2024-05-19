@@ -10,7 +10,6 @@ urlpatterns = [
 
 router = DefaultRouter()
 router.register(r'users',views.UserViewSet)
-
 urlpatterns+=router.urls
 
 # urlpatterns = [

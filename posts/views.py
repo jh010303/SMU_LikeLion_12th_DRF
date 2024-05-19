@@ -60,11 +60,10 @@ class PostListAPIView(CreateAPIView,ListAPIView): # 게시글 생성, 조회 클
     serializer_class = PostSerializer
     lookup_field = 'id'
 
-    def create(self,request): # create 함수 메서드 오버라이딩
-        serializer = PostSerializer(data=request.data) # 요청 데이터에 기반하여 PostSerializer 생성, PostSerailizer의 매개변수에는 딕셔너리
-        # request.data: user가 작성한 게시글의 데이터, 처음 선언할 때 매개변수 1개만 넣어야 함
+    def create(self,request): # create 함수 오버라이딩
+        serializer = PostSerializer(data=request.data) 
         if serializer.is_valid():
-            serializer.save(user = request.user) # user = request.user
+            serializer.save(user = request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     

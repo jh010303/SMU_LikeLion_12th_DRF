@@ -59,7 +59,7 @@ from rest_framework.decorators import action
 
 #========================================view set 방법=========================================================
 
-class UserViewSet(viewsets.ModelViewSet): # 로그인 빼고 전부 구현
+class UserViewSet(viewsets.ModelViewSet): # 전부 구현
     queryset = User.objects.all()
     serializer_class = UserSerializer
     lookup_field = 'id'
@@ -82,3 +82,4 @@ class UserViewSet(viewsets.ModelViewSet): # 로그인 빼고 전부 구현
                 "user":serializer.data,
             }
         )
+    

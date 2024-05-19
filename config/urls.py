@@ -21,7 +21,7 @@ from django.conf import settings
 
 urlpatterns = [
     path('posts/', include('posts.urls')), 
-    path('users/', include('users.urls')), 
+    path('', include('users.urls')),  # viewset 사용
     path('comments/', include('comments.urls')), 
     path('postlikes/', include('postlikes.urls')), 
     path('commentlikes/', include('commentlikes.urls')), 
