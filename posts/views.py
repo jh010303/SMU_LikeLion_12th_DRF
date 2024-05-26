@@ -4,10 +4,8 @@ from posts.serializers import PostSerializer
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-
 from rest_framework.generics import (
-    CreateAPIView,
-    ListAPIView,
+    ListCreateAPIView,
     RetrieveAPIView,
     RetrieveUpdateDestroyAPIView
 )
@@ -55,20 +53,26 @@ from rest_framework.generics import (
 #         return Response(status=status.HTTP_204_NO_CONTENT)
     
 #=======================Generic API View 방법 ================================
-class PostListAPIView(CreateAPIView,ListAPIView): # 게시글 생성, 조회 클래스
+class PostListAPIView(ListCreateAPIView): # 게시글 생성, 조회 클래스
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = 'id'
 
-    def create(self,request): # create 함수 오버라이딩
+    def create(self,request): 
         serializer = PostSerializer(data=request.data) 
         if serializer.is_valid():
             serializer.save(user = request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+    #def perform_create(self, serializer):
+    #    serializer.save(user = request.user)
+    # 위에꺼 지우고 perform_create만 해도 괜찮음
+    
 
-class PostRetrieveAPIView(RetrieveAPIView,RetrieveUpdateDestroyAPIView): # 게시글 삭제, 수정, 조회 클래스 ( 특정 게시글만 )
+    
+
+class PostRetrieveAPIView(RetrieveUpdateDestroyAPIView): # 게시글 삭제, 수정, 조회 클래스 ( 특정 게시글만 )
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     lookup_field = 'id'
